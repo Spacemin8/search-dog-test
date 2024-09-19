@@ -14,7 +14,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { Stack } from '@mui/system';
-import { Pagination } from '@mui/material';
+import TablePagination from '@mui/material/TablePagination';
 
 const Dashboard: React.FC = () => {
   // const authContext = useContext(AuthContext);
@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
 
   const [selectedBreeds, setSelectedBreeds] = React.useState<string[]>([]);
   const [breeds, setBreeds] = React.useState<Array<string>>([]);
-  const [pageSize] = React.useState(24);
+  const [pageSize, setPageSize] = React.useState(5);
   const [pageIndex, setPageIndex] = React.useState(0);
   const [sort, setSort] = React.useState<'asc' | 'desc'>('asc');
   const [dogIds, setDogIds] = React.useState<Array<string>>([]);
@@ -83,8 +83,13 @@ const Dashboard: React.FC = () => {
     setSelectedBreeds(typeof value === 'string' ? value.split(',') : value);
   };
 
-  const pageChange = (e: React.ChangeEvent<unknown>, value: number) => {
-    setPageIndex(value);
+  const handleChangePage = (e: unknown, newPage: number) => {
+    setPageIndex(newPage);
+  };
+
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageSize(parseInt(e.target.value, 10));
+    setPageIndex(0);
   };
 
   return (
@@ -117,7 +122,7 @@ const Dashboard: React.FC = () => {
         <div className="dog-list w-full flex gap-2 mt-4">
           <DogList dogs={dogs} />
         </div>
-        <Stack spacing={2}>
+        {/* <Stack spacing={2}>
           <Pagination
             className="w-full"
             count={Math.floor(total / pageSize)}
@@ -126,7 +131,16 @@ const Dashboard: React.FC = () => {
             color="primary"
             onChange={pageChange}
           />
-        </Stack>
+        </Stack> */}
+
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPage={pageSize}
+          count={Math.floor(total / pageSize)}
+          page={pageIndex}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </div>
     </div>
   );
