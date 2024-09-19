@@ -11,7 +11,13 @@ export class Api {
       const keys = Object.keys(params);
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        query += `${key}=${encodeURIComponent(params[key])}`;
+        const value = params[key];
+        if (typeof value !== 'object') {
+          query += `${key}=${encodeURIComponent(params[key])}`;
+        } else if (Array.isArray(value)) {
+          query += `${key}=${encodeURIComponent(value.join(','))}`;
+        }
+
         if (i < keys.length - 1) {
           query += '&';
         }

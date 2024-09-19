@@ -18,9 +18,9 @@ export class Dog {
     return [];
   }
 
-  static async searchDogIds() {
+  static async searchDogIds(params: any) {
     try {
-      const response = await Api.get('/dogs/search');
+      const response = await Api.get('/dogs/search', params);
       const resultIds = response.data.resultIds ?? [];
       return resultIds;
     } catch (error) {

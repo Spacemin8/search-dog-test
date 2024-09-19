@@ -6,11 +6,31 @@ import { AuthContext } from '../context/authContext';
 import LogOut from '../components/logOut';
 import { Dog, Location, Coordinate } from '../core';
 import { DogList } from '../components';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import { Stack } from '@mui/system';
+import { Pagination } from '@mui/material';
 
 const Dashboard: React.FC = () => {
   // const authContext = useContext(AuthContext);
   // const navigate = useNavigate();
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250
+      }
+    }
+  };
 
+  const [selectedBreeds, setSelectedBreeds] = React.useState<string[]>([]);
   const [breeds, setBreeds] = React.useState<Array<string>>([]);
   const [pageSize] = React.useState(24);
   const [pageIndex, setPageIndex] = React.useState(0);
@@ -29,10 +49,13 @@ const Dashboard: React.FC = () => {
 
   React.useEffect(() => {
     searchDogIds();
-  }, [pageSize, pageIndex, sort]);
+  }, [pageSize, pageIndex, selectedBreeds, sort]);
 
   const searchDogIds = async () => {
-    const dogIds = await Dog.searchDogIds();
+    let params = {};
+    if (selectedBreeds.length > 0)
+      params = { ...params, breeds: selectedBreeds };
+    const dogIds = await Dog.searchDogIds(params);
     setDogIds(dogIds);
   };
 
@@ -45,22 +68,46 @@ const Dashboard: React.FC = () => {
     setDogs(dogs);
   };
 
+  const handleChange = (e: SelectChangeEvent<typeof selectedBreeds>) => {
+    const {
+      target: { value }
+    } = e;
+    setSelectedBreeds(typeof value === 'string' ? value.split(',') : value);
+  };
+
   return (
     <div className="dashboard w-full">
       <div className="navbar">
-        <h2>DashBoard</h2>
         <LogOut />
       </div>
 
       <div className="main p-4">
-        <div className="breed-list flex gap-2">
-          {breeds.map((breed, index) => (
-            <button key={index}>{breed}</button>
-          ))}
-        </div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="demo-multiple-checkbox-label">Breeds</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            multiple
+            value={selectedBreeds}
+            onChange={handleChange}
+            input={<OutlinedInput label="Breeds" />}
+            renderValue={(selected) => selected.join(', ')}
+            MenuProps={MenuProps}
+          >
+            {breeds.map((breed) => (
+              <MenuItem key={breed} value={breed}>
+                <Checkbox checked={selectedBreeds.includes(breed)} />
+                <ListItemText primary={breed} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <div className="dog-list w-full flex gap-2 mt-4">
           <DogList dogs={dogs} />
         </div>
+        <Stack spacing={2}>
+          <Pagination count={pageSize} color="primary" />
+        </Stack>
       </div>
     </div>
   );
