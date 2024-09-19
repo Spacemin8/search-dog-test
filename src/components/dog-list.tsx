@@ -13,9 +13,10 @@ import { clsxm } from '../lib';
 interface Props {
   className?: string;
   dogs: Array<Dog>;
+  onClick?: (dogId: string) => void;
 }
 
-export const DogList: React.FC<Props> = ({ className = '', dogs }) => {
+export const DogList: React.FC<Props> = ({ className = '', dogs, onClick }) => {
   return (
     <List
       className={clsxm('dog-list', 'w-full', className)}
@@ -45,6 +46,7 @@ export const DogList: React.FC<Props> = ({ className = '', dogs }) => {
                   {dog.zip_code} - {dog.breed}
                 </React.Fragment>
               }
+              onClick={() => onClick?.(dog.id)}
             />
           </ListItem>
           <Divider variant="inset" component="li" />

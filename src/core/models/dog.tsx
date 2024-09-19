@@ -39,4 +39,14 @@ export class Dog {
     }
     return [];
   }
+
+  static async searchMatches(dogIds: Array<string>) {
+    try {
+      const response = await Api.post('/dogs/match', dogIds);
+      return response.data.match;
+    } catch (error) {
+      console.log(error);
+    }
+    return [];
+  }
 }

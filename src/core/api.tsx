@@ -13,7 +13,8 @@ export class Api {
         const key = keys[i];
         const value = params[key];
         if (typeof value !== 'object') {
-          query += `${key}=${encodeURIComponent(params[key])}`;
+          // query += `${key}=${encodeURIComponent(params[key])}`;
+          query += `${key}=${value}`;
         } else if (Array.isArray(value)) {
           query += `${key}=${encodeURIComponent(value.join(','))}`;
         }

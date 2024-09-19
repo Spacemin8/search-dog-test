@@ -35,6 +35,8 @@ const Dashboard: React.FC = () => {
   const [pageSize, setPageSize] = React.useState(5);
   const [pageIndex, setPageIndex] = React.useState(0);
   const [sort, setSort] = React.useState<'asc' | 'desc'>('asc');
+  const [favoriteDogIds, setFavoriteDogIds] = React.useState<Array<string>>([]);
+  const [favoriteDogs, setFavoriteDogs] = React.useState<Array<Dog>>([]);
   const [dogIds, setDogIds] = React.useState<Array<string>>([]);
   const [dogs, setDogs] = React.useState<Array<Dog>>([]);
   const [total, setTotal] = React.useState(0);
@@ -62,6 +64,7 @@ const Dashboard: React.FC = () => {
         params = { ...params, size: total - pageIndex * pageSize };
       }
     }
+    params = { ...params, sort: `breed:${sort}` };
     const response = await Dog.searchDogIds(params);
     setDogIds(response.resultIds);
     setTotal(response.total);
@@ -74,6 +77,21 @@ const Dashboard: React.FC = () => {
   const searchDogs = async () => {
     const dogs = await Dog.searchDogs(dogIds);
     setDogs(dogs);
+  };
+
+  React.useEffect(() => {
+    searchMatches();
+  }, [favoriteDogIds]);
+  const searchMatches = async () => {
+    if (favoriteDogIds.length <= 0) {
+      setFavoriteDogs([]);
+      return;
+    }
+
+    const dogId = await Dog.searchMatches(favoriteDogIds);
+
+    const dogs = await Dog.searchDogs([dogId]);
+    setFavoriteDogs(dogs);
   };
 
   const breedsChange = (e: SelectChangeEvent<typeof selectedBreeds>) => {
@@ -92,6 +110,18 @@ const Dashboard: React.FC = () => {
     setPageIndex(0);
   };
 
+  const handleSelectSort = (e: SelectChangeEvent<any>) => {
+    setSort(e.target.value);
+  };
+
+  const handleSelectDog = (dogId: string) => {
+    if (favoriteDogIds.some((x) => x === dogId)) {
+      setFavoriteDogIds(favoriteDogIds.filter((x) => x !== dogId));
+    } else {
+      setFavoriteDogIds([...favoriteDogIds, dogId]);
+    }
+  };
+
   return (
     <div className="dashboard w-full">
       <div className="navbar">
@@ -99,7 +129,10 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="main p-4">
-        <FormControl sx={{ m: 1, width: 300 }}>
+        <div className="dog-list w-full flex gap-2 mt-4">
+          <DogList dogs={favoriteDogs} />
+        </div>
+        <FormControl sx={{ m: 1, minWidth: 300 }}>
           <InputLabel id="demo-multiple-checkbox-label">Breeds</InputLabel>
           <Select
             labelId="demo-multiple-checkbox-label"
@@ -119,8 +152,15 @@ const Dashboard: React.FC = () => {
             ))}
           </Select>
         </FormControl>
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="demo-simple-select-helper-label">Sort</InputLabel>
+          <Select value={sort} label="Sort" onChange={handleSelectSort}>
+            <MenuItem value="asc">ASC</MenuItem>
+            <MenuItem value="desc">DESC</MenuItem>
+          </Select>
+        </FormControl>
         <div className="dog-list w-full flex gap-2 mt-4">
-          <DogList dogs={dogs} />
+          <DogList dogs={dogs} onClick={(dogId) => handleSelectDog(dogId)} />
         </div>
         {/* <Stack spacing={2}>
           <Pagination
