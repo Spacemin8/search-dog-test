@@ -4,27 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/authContext';
 import LogOut from '../components/logOut';
-
-interface Dog {
-  id: string;
-  img: string;
-  name: string;
-  age: number;
-  zip_code: string;
-  breed: string;
-}
-interface Location {
-  zip_code: string;
-  latitude: number;
-  longitude: number;
-  city: string;
-  state: string;
-  county: string;
-}
-interface Coordinates {
-  lat: number;
-  lon: number;
-}
+import { Dog, Location, Coordinate } from '../core';
 
 const Dashboard: React.FC = () => {
   // const authContext = useContext(AuthContext);
