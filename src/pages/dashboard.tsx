@@ -37,6 +37,7 @@ const Dashboard: React.FC = () => {
   const [sort, setSort] = React.useState<'asc' | 'desc'>('asc');
   const [dogIds, setDogIds] = React.useState<Array<string>>([]);
   const [dogs, setDogs] = React.useState<Array<Dog>>([]);
+  const [total, setTotal] = React.useState(0);
 
   React.useEffect(() => {
     fetchBreeds();
@@ -52,11 +53,18 @@ const Dashboard: React.FC = () => {
   }, [pageSize, pageIndex, selectedBreeds, sort]);
 
   const searchDogIds = async () => {
-    let params = {};
+    let params: any = { size: pageSize };
     if (selectedBreeds.length > 0)
       params = { ...params, breeds: selectedBreeds };
-    const dogIds = await Dog.searchDogIds(params);
-    setDogIds(dogIds);
+    if (pageIndex > 0) {
+      params = { ...params, from: pageIndex * pageSize };
+      if ((pageIndex + 1) * pageSize > total) {
+        params = { ...params, size: total - pageIndex * pageSize };
+      }
+    }
+    const response = await Dog.searchDogIds(params);
+    setDogIds(response.resultIds);
+    setTotal(response.total);
   };
 
   React.useEffect(() => {
@@ -68,11 +76,15 @@ const Dashboard: React.FC = () => {
     setDogs(dogs);
   };
 
-  const handleChange = (e: SelectChangeEvent<typeof selectedBreeds>) => {
+  const breedsChange = (e: SelectChangeEvent<typeof selectedBreeds>) => {
     const {
       target: { value }
     } = e;
     setSelectedBreeds(typeof value === 'string' ? value.split(',') : value);
+  };
+
+  const pageChange = (e: React.ChangeEvent<unknown>, value: number) => {
+    setPageIndex(value);
   };
 
   return (
@@ -89,7 +101,7 @@ const Dashboard: React.FC = () => {
             id="demo-multiple-checkbox"
             multiple
             value={selectedBreeds}
-            onChange={handleChange}
+            onChange={breedsChange}
             input={<OutlinedInput label="Breeds" />}
             renderValue={(selected) => selected.join(', ')}
             MenuProps={MenuProps}
@@ -106,7 +118,14 @@ const Dashboard: React.FC = () => {
           <DogList dogs={dogs} />
         </div>
         <Stack spacing={2}>
-          <Pagination count={pageSize} color="primary" />
+          <Pagination
+            className="w-full"
+            count={Math.floor(total / pageSize)}
+            boundaryCount={3}
+            page={pageIndex}
+            color="primary"
+            onChange={pageChange}
+          />
         </Stack>
       </div>
     </div>

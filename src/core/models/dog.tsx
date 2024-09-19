@@ -21,12 +21,12 @@ export class Dog {
   static async searchDogIds(params: any) {
     try {
       const response = await Api.get('/dogs/search', params);
-      const resultIds = response.data.resultIds ?? [];
-      return resultIds;
+      const { resultIds, total } = response.data;
+      return { resultIds, total };
     } catch (error) {
       console.log(error);
     }
-    return [];
+    return { resultIds: [], total: 0 };
   }
 
   static async searchDogs(dogIds: Array<string>) {
