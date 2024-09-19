@@ -22,16 +22,8 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const fetchBreeds = async () => {
-    try {
-      const baseUrl = process.env.REACT_APP_BASE_URL;
-      const response = await axios.get(baseUrl + '/dogs/breeds', {
-        withCredentials: true
-      });
-      const breeds = response.data;
-      setBreeds(breeds);
-    } catch (error) {
-      console.log(error);
-    }
+    const breeds = await Dog.fetchBreeds();
+    setBreeds(breeds);
   };
 
   React.useEffect(() => {
@@ -39,12 +31,8 @@ const Dashboard: React.FC = () => {
   }, [pageSize, pageIndex, sort]);
 
   const searchDogIds = async () => {
-    const baseUrl = process.env.REACT_APP_BASE_URL;
-    const response = await axios.get(baseUrl + '/dogs/search', {
-      withCredentials: true
-    });
-    const { resultIds } = response.data;
-    setDogIds(resultIds ?? []);
+    const dogIds = await Dog.searchDogIds();
+    setDogIds(dogIds);
   };
 
   React.useEffect(() => {
@@ -52,12 +40,8 @@ const Dashboard: React.FC = () => {
   }, [dogIds]);
 
   const searchDogs = async () => {
-    const baseUrl = process.env.REACT_APP_BASE_URL;
-    const response = await axios.post(baseUrl + '/dogs', dogIds, {
-      withCredentials: true
-    });
-    const results = response.data;
-    setDogs(results ?? []);
+    const dogs = await Dog.searchDogs(dogIds);
+    setDogs(dogs);
   };
 
   return (
