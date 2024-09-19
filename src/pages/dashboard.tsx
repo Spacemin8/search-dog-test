@@ -5,6 +5,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/authContext';
 import LogOut from '../components/logOut';
 import { Dog, Location, Coordinate } from '../core';
+import { DogList } from '../components';
 
 const Dashboard: React.FC = () => {
   // const authContext = useContext(AuthContext);
@@ -58,31 +59,7 @@ const Dashboard: React.FC = () => {
           ))}
         </div>
         <div className="dog-list flex gap-2 mt-4">
-          {dogs.map((dog) => (
-            <div key={dog.id} className="dog-item">
-              <img
-                className="w-full aspect-square object-cover overflow-hidden rounded-[8px]"
-                src={dog.img}
-                alt=""
-              />
-              <div>
-                Id: <strong>{dog.id}</strong>
-              </div>
-              <div>
-                Name: <strong>{dog.name}</strong>
-              </div>
-              <div>
-                Age: <strong>{dog.age}</strong>
-              </div>
-              <div>
-                Zip Code: <strong>{dog.zip_code}</strong>
-              </div>
-              <div>
-                Breed: <strong>{dog.breed}</strong>
-              </div>
-            </div>
-          ))}
-          d
+          <DogList dogs={dogs} />
         </div>
       </div>
     </div>
