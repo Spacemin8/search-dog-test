@@ -68,12 +68,12 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="main">
-        <div className="breed-list">
+        <div className="breed-list flex">
           {breeds.map((breed, index) => (
             <button key={index}>{breed}</button>
           ))}
         </div>
-        <div className="dog-list">
+        <div className="dog-list flex">
           {dogs.map((dog) => (
             <div key={dog.id} className="dog-item">
               <img src={dog.img} alt="" />
