@@ -51,21 +51,35 @@ const Dashboard: React.FC = () => {
         <LogOut />
       </div>
 
-      <div className="main">
-        <div className="breed-list flex">
+      <div className="main p-4">
+        <div className="breed-list flex gap-2">
           {breeds.map((breed, index) => (
             <button key={index}>{breed}</button>
           ))}
         </div>
-        <div className="dog-list flex">
+        <div className="dog-list flex gap-2 mt-4">
           {dogs.map((dog) => (
             <div key={dog.id} className="dog-item">
-              <img src={dog.img} alt="" />
-              <div>Id: {dog.id}</div>
-              <div>Name: {dog.name}</div>
-              <div>Age: {dog.age}</div>
-              <div>Zip Code: {dog.zip_code}</div>
-              <div>Breed: {dog.breed}</div>
+              <img
+                className="w-full aspect-square object-cover overflow-hidden rounded-[8px]"
+                src={dog.img}
+                alt=""
+              />
+              <div>
+                Id: <strong>{dog.id}</strong>
+              </div>
+              <div>
+                Name: <strong>{dog.name}</strong>
+              </div>
+              <div>
+                Age: <strong>{dog.age}</strong>
+              </div>
+              <div>
+                Zip Code: <strong>{dog.zip_code}</strong>
+              </div>
+              <div>
+                Breed: <strong>{dog.breed}</strong>
+              </div>
             </div>
           ))}
           d
