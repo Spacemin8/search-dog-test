@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="dashboard w-full">
       <div className="navbar">
         <h2>DashBoard</h2>
         <LogOut />
@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
             <button key={index}>{breed}</button>
           ))}
         </div>
-        <div className="dog-list flex gap-2 mt-4">
+        <div className="dog-list w-full flex gap-2 mt-4">
           <DogList dogs={dogs} />
         </div>
       </div>
