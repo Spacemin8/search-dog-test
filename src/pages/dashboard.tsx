@@ -1,12 +1,4 @@
-import '../assets/styles/dashboard.css';
-import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { AuthContext } from '../context/authContext';
-import LogOut from '../components/log-out';
-import Hamburger from '../components/hamburger';
-import { Dog, Location, Coordinate } from '../core';
-import { DogList } from '../components';
+import React from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,10 +6,14 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import { Stack } from '@mui/system';
 import TablePagination from '@mui/material/TablePagination';
-import { Container } from '@mui/material';
-import { Dialog, DialogPanel } from '@headlessui/react';
+
+import '../assets/styles/dashboard.css';
+
+import LogOut from '../components/log-out';
+import Hamburger from '../components/hamburger';
+import { Dog } from '../core';
+import { DogList } from '../components';
 
 const Dashboard: React.FC = () => {
   // const authContext = useContext(AuthContext);
@@ -142,7 +138,10 @@ const Dashboard: React.FC = () => {
         </nav>
       </header>
       <div className="main p-4">
-        <div className="dog-list w-full flex gap-2 mt-4">
+        <div className="dog-list w-full mt-4">
+          <div>
+            <strong>Matches:</strong>
+          </div>
           <DogList dogs={favoriteDogs} />
         </div>
         <FormControl sx={{ m: 1, minWidth: 300 }}>
@@ -165,15 +164,25 @@ const Dashboard: React.FC = () => {
             ))}
           </Select>
         </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="demo-simple-select-helper-label">Sort</InputLabel>
-          <Select value={sort} label="Sort" onChange={handleSelectSort}>
+        <FormControl sx={{ m: 1, minWidth: 180 }}>
+          <InputLabel id="demo-simple-select-helper-label">
+            Sort by breed
+          </InputLabel>
+          <Select
+            value={sort}
+            label="Sort by breed"
+            onChange={handleSelectSort}
+          >
             <MenuItem value="asc">ASC</MenuItem>
             <MenuItem value="desc">DESC</MenuItem>
           </Select>
         </FormControl>
         <div className="dog-list w-full flex gap-2 mt-4">
-          <DogList dogs={dogs} onClick={(dogId) => handleSelectDog(dogId)} />
+          <DogList
+            dogs={dogs}
+            selectedIds={favoriteDogIds}
+            onClick={(dogId) => handleSelectDog(dogId)}
+          />
         </div>
         {/* <Stack spacing={2}>
           <Pagination
@@ -189,7 +198,7 @@ const Dashboard: React.FC = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             rowsPerPage={pageSize}
-            count={Math.floor(total)}
+            count={total}
             page={pageIndex}
             sx={{ width: '100%' }}
             onPageChange={handleChangePage}

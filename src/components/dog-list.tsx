@@ -13,10 +13,16 @@ import { clsxm } from '../lib';
 interface Props {
   className?: string;
   dogs: Array<Dog>;
+  selectedIds?: Array<string>;
   onClick?: (dogId: string) => void;
 }
 
-export const DogList: React.FC<Props> = ({ className = '', dogs, onClick }) => {
+export const DogList: React.FC<Props> = ({
+  className = '',
+  dogs,
+  selectedIds = [],
+  onClick
+}) => {
   return (
     <List
       className={clsxm('dog-list', 'w-full', className)}
@@ -24,7 +30,15 @@ export const DogList: React.FC<Props> = ({ className = '', dogs, onClick }) => {
     >
       {dogs.map((dog) => (
         <React.Fragment key={dog.id}>
-          <ListItem alignItems="flex-start">
+          <ListItem
+            className={clsxm(
+              'cursor-pointer',
+              selectedIds.some((x) => x === dog.id)
+                ? 'border-[2px] rounded-2'
+                : ''
+            )}
+            alignItems="flex-start"
+          >
             <ListItemAvatar>
               <Avatar alt="Remy Sharp" src={dog.img} />
             </ListItemAvatar>
