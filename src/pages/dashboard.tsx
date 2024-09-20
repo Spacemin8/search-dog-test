@@ -10,10 +10,8 @@ import TablePagination from '@mui/material/TablePagination';
 
 import '../assets/styles/dashboard.css';
 
-import LogOut from '../components/log-out';
-import Hamburger from '../components/hamburger';
 import { Dog } from '../core';
-import { DogList } from '../components';
+import { AppHeader, DogList } from '../components';
 
 const Dashboard: React.FC = () => {
   // const authContext = useContext(AuthContext);
@@ -124,19 +122,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard w-full">
-      <header className="bg-white">
-        <nav
-          aria-label="Global"
-          className="mx-auto flex max-w-7xl items-end justify-end sm:items-center sm:justify-between p-6 lg:px-8"
-        >
-          <div className="hidden sm:flex sm:flex-1 sm:justify-end">
-            <LogOut />
-          </div>
-          <div className="flex sm:hidden">
-            <Hamburger />
-          </div>
-        </nav>
-      </header>
+      <AppHeader />
       <div className="main p-4">
         <div className="dog-list w-full mt-4">
           <div>

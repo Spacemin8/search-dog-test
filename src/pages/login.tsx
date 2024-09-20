@@ -1,5 +1,5 @@
 import '../assets/styles/login.css';
-import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // import { AuthContext } from '../context/authContext';
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={onSubmit}>
         <div>
-          <label>name:</label>
+          <label>Name:</label>
           <input
             type="name"
             name="name"
