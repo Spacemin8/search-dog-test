@@ -19,8 +19,7 @@
 
 .logout {
   padding: 10px;
-  position: relative;
-  left: 80%;
+  cursor: pointer;
 }
 
 .logout span {
@@ -81,7 +80,16 @@ button {
 button:hover {
   background-color: #0056b3;
 }
-
+.menu-icon {
+	font-family: 'Syne';
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 40px;
+	letter-spacing: 0.04em;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+}
 /* Responsive layout */
 @media (max-width: 400px) {
   .login-container {

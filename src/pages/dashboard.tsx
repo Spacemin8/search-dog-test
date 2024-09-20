@@ -3,7 +3,8 @@ import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/authContext';
-import LogOut from '../components/logOut';
+import LogOut from '../components/log-out';
+import Hamburger from '../components/hamburger';
 import { Dog, Location, Coordinate } from '../core';
 import { DogList } from '../components';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -15,6 +16,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { Stack } from '@mui/system';
 import TablePagination from '@mui/material/TablePagination';
+import { Container } from '@mui/material';
+import { Dialog, DialogPanel } from '@headlessui/react';
 
 const Dashboard: React.FC = () => {
   // const authContext = useContext(AuthContext);
@@ -112,6 +115,7 @@ const Dashboard: React.FC = () => {
 
   const handleSelectSort = (e: SelectChangeEvent<any>) => {
     setSort(e.target.value);
+    setPageIndex(0);
   };
 
   const handleSelectDog = (dogId: string) => {
@@ -124,10 +128,19 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard w-full">
-      <div className="navbar">
-        <LogOut />
-      </div>
-
+      <header className="bg-white">
+        <nav
+          aria-label="Global"
+          className="mx-auto flex max-w-7xl items-end justify-end sm:items-center sm:justify-between p-6 lg:px-8"
+        >
+          <div className="hidden sm:flex sm:flex-1 sm:justify-end">
+            <LogOut />
+          </div>
+          <div className="flex sm:hidden">
+            <Hamburger />
+          </div>
+        </nav>
+      </header>
       <div className="main p-4">
         <div className="dog-list w-full flex gap-2 mt-4">
           <DogList dogs={favoriteDogs} />
@@ -172,15 +185,17 @@ const Dashboard: React.FC = () => {
             onChange={pageChange}
           />
         </Stack> */}
-
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          rowsPerPage={pageSize}
-          count={Math.floor(total / pageSize)}
-          page={pageIndex}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <div className="flex flex-col w-full">
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPage={pageSize}
+            count={Math.floor(total)}
+            page={pageIndex}
+            sx={{ width: '100%' }}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
       </div>
     </div>
   );

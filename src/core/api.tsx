@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { get, isEmpty, isNil } from 'lodash';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+const api = axios.create({ baseURL: BASE_URL, withCredentials: true });
 
 export class Api {
   static async get(path: string, params: any = {}) {
@@ -27,7 +28,7 @@ export class Api {
 
     try {
       const requestPath = BASE_URL + path + query;
-      const response = await axios.get(requestPath, { withCredentials: true });
+      const response = await api.get(path + query);
       return response;
     } catch (error: any) {
       console.error(error);
@@ -37,9 +38,7 @@ export class Api {
 
   static async post(path: string, params: any = {}) {
     try {
-      const response = await axios.post(BASE_URL + path, params, {
-        withCredentials: true
-      });
+      const response = await api.post(path, params);
       return response;
     } catch (error: any) {
       console.error(error);
@@ -49,9 +48,7 @@ export class Api {
 
   static async put(path: string, params: any = {}) {
     try {
-      const response = await axios.put(BASE_URL + path, params, {
-        withCredentials: true
-      });
+      const response = await api.put(path, params);
       return response;
     } catch (error: any) {
       console.error(error);
@@ -61,9 +58,8 @@ export class Api {
 
   static async delete(path: string, params: any = null) {
     try {
-      const response = await axios.delete(BASE_URL + path, {
-        data: params,
-        withCredentials: true
+      const response = await api.delete(path, {
+        data: params
       });
       return response;
     } catch (error: any) {

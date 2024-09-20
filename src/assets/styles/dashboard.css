@@ -1,4 +1,21 @@
 .navbar {
-  width: 100%;
+	height: 136px;
+	padding: 40px 8.6% 40px 8.6%;
+	box-sizing: border-box;
+	display: flex;
+}
+
+.MuiTablePagination-root .MuiTablePagination-toolbar .MuiTablePagination-spacer{
+  display: none;
+}
+
+.MuiTablePagination-root .MuiTablePagination-toolbar .MuiTablePagination-actions{
   display: flex;
+  flex-direction: row;
+}
+
+.MuiTablePagination-root .MuiTablePagination-toolbar .MuiTablePagination-actions .MuiIconButton-root{
+  padding: 0px;
+  width: 48px;
+  height: 48px;
 }
